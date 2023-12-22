@@ -16,8 +16,8 @@ const FileUpload = ({ onFileUpload }) => {
 
     return (
         <div>
-            <input type="file" onChange={handleFileChange} />
-            <button onClick={handleUpload}>Upload</button>
+            <input type="file" className="file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={handleFileChange} />
+            <button className="btn btn-primary" onClick={handleUpload}>Upload</button>
         </div>
     );
 };

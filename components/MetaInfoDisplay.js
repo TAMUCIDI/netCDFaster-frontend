@@ -15,29 +15,32 @@ const MetaInfoDisplay = ({ jsonData }) => {
   }
 
   return (
-    <div>
-      <h2>NetCDF MetaInfo</h2>
-      <h3>Dimensions:</h3>
-      <ul>
-        {Object.entries(metaInfo.dimensions).map(([key, value]) => (
-          <li key={key}>{key}: {value}</li>
-        ))}
-      </ul>
-      <h3>Variables:</h3>
-      <ul>
-        {Object.entries(metaInfo.variables).map(([key, value]) => (
-          <li key={key}>
-            {key} (dims: {value.dims.join(', ')}; dtype: {value.dtype})
-          </li>
-        ))}
-      </ul>
-      <h3>Global Attributes:</h3>
-      <ul>
-        {Object.entries(metaInfo.attributes).map(([key, value]) => (
-          <li key={key}>{key}: {value}</li>
-        ))}
-      </ul>
-    </div>
+    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+  <h2 className="text-xl font-bold text-gray-900 mb-2">NetCDF MetaInfo</h2>
+  
+  <h3 className="text-lg font-semibold text-gray-700 mt-4">Dimensions:</h3>
+  <ul className="list-disc list-inside">
+    {Object.entries(metaInfo.dimensions).map(([key, value]) => (
+      <li key={key} className="text-gray-600">{key}: {value}</li>
+    ))}
+  </ul>
+
+  <h3 className="text-lg font-semibold text-gray-700 mt-4">Variables:</h3>
+  <ul className="list-disc list-inside">
+    {Object.entries(metaInfo.variables).map(([key, value]) => (
+      <li key={key} className="text-gray-600">
+        {key} (dims: {value.dims.join(', ')}; dtype: {value.dtype})
+      </li>
+    ))}
+  </ul>
+
+  <h3 className="text-lg font-semibold text-gray-700 mt-4">Global Attributes:</h3>
+  <ul className="list-disc list-inside">
+    {Object.entries(metaInfo.attributes).map(([key, value]) => (
+      <li key={key} className="text-gray-600">{key}: {value}</li>
+    ))}
+  </ul>
+</div>
   );
 };
 

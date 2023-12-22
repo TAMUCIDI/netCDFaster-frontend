@@ -1,10 +1,10 @@
-// pages/index.js
+"use client";
 import React, { useState } from 'react';
-import FileUpload from '../components/FileUpload';
+import FileUpload from '@/components/FileUpload';
 import MetaInfoDisplay from '@/components/MetaInfoDisplay';
 
-const HomePage = () => {
-    const [metaInfoJson, setMetaInfoJson] = useState(null);
+export default function Home() {
+  const [metaInfoJson, setMetaInfoJson] = useState(null);
 
     const handleFileUpload = async (file) => {
         const formData = new FormData();
@@ -27,6 +27,4 @@ const HomePage = () => {
             {metaInfoJson && <MetaInfoDisplay jsonData={metaInfoJson} />}
         </div>
     );
-};
-
-export default HomePage;
+}
