@@ -15,9 +15,9 @@ const FileUpload = ({ onFileUpload }) => {
     };
 
     return (
-        <div>
-            <input type="file" className="file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={handleFileChange} />
-            <button className="btn btn-primary" onClick={handleUpload}>Upload</button>
+        <div className='flex max-w-xl justify-around'>
+            <input type="file" className="file-input file-input-bordered file-input-primary mx-8" onChange={handleFileChange} />
+            <button className="btn btn-primary mx-8" onClick={handleUpload}>Upload</button>
         </div>
     );
 };
