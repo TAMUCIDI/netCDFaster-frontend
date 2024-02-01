@@ -13,9 +13,10 @@ export default function Home() {
         formData.append('file', file);
 
         try {
-            const response = await fetch('http://localhost:5000/upload', {
+            const response = await fetch('http://localhost:5000/file/upload', {
                 method: 'POST',
                 body: formData,
+                credentials: 'include',
             });
             const data = await response.json();
             setMetaInfoJson(JSON.stringify(data));
