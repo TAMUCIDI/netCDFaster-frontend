@@ -6,7 +6,7 @@ const VarList = ( {varList} ) => {
 
     const handleVarCardClick = async (key) => {
         try {
-            const response = await fetch('http://localhost:5000/file/detail/'+key,
+            const response = await fetch('http://127.0.0.1:5000/file/detail/'+key,
             {
                 method: 'GET',
                 credentials: 'include',

@@ -1,5 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import DimensionSelector from '@/app/components/DimensionSelector';
+import { Form, Button } from 'antd';
 
 const VarDetailCard = () => {
     const [varDetail, setvarDetail] = useState(null);
@@ -17,8 +19,19 @@ const VarDetailCard = () => {
     if (!varDetail) {
         return <div>Loading...</div>;
     }
+
+    const onFinish = (values) => {
+        console.log('Received values of form: ', values);
+        if (varDetail) {
+            values.varName = varDetail.name;
+        }
+        if (values.time) {
+            values.time = values.time.format('YYYY-MM-DD');
+        }
+    };
     return (
         <div>
+        <Form onFinish={onFinish}>
             <h1>Variable Details</h1>
             <div className="collapse bg-base-200">
                 <input type="checkbox" /> 
@@ -53,6 +66,10 @@ const VarDetailCard = () => {
                                         <p><strong>Type:</strong> {coord.dtype}</p>
                                         <p><strong>Min:</strong> {coord.min}</p>
                                         <p><strong>Max:</strong> {coord.max}</p>
+                                        <Form.Item name={coord.name} label={coord.name.charAt(0).toUpperCase() + coord.name.slice(1)}>
+                                            <DimensionSelector dimension={coord} />
+                                        </Form.Item>
+                                        
                                     </div>
                                 </div>
                             </li>
@@ -63,6 +80,10 @@ const VarDetailCard = () => {
                 )}
                 </div>
             </div>
+            <Button type="primary" htmlType="submit">
+                Submit
+            </Button>
+        </Form>
         </div>
     );
 };

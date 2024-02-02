@@ -13,7 +13,7 @@ export default function Home() {
         formData.append('file', file);
 
         try {
-            const response = await fetch('http://localhost:5000/file/upload', {
+            const response = await fetch('http://127.0.0.1:5000/file/upload', {
                 method: 'POST',
                 body: formData,
                 credentials: 'include',
