@@ -1,11 +1,38 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import DimensionSelector from '@/app/components/DimensionSelector';
-import { Form, Button } from 'antd';
+
+import TimeInput from '@/app/components/TimeInput';
+import LonLatInput from '@/app/components/LonLatInput';
 
 const VarDetailCard = () => {
     const [varDetail, setvarDetail] = useState(null);
 
+    const queryJson = {};
+    queryJson.varName = varDetail? varDetail.name: null;
+    queryJson.time = new Date().toISOString();
+    queryJson.lon = {};
+    queryJson.lon.min = null;
+    queryJson.lon.max = null;
+    queryJson.lat = {};
+    queryJson.lat.min = null;
+    queryJson.lat.max = null;
+
+    const handleTimeChange = (value) => {
+        queryJson.time = value.toISOString();
+    };
+    const handleLonChange = (value) => {
+        queryJson.lon.min = value[0];
+        queryJson.lon.max = value[1];
+    };
+    const handleLatChange = (value) => {
+        queryJson.lat.min = value[0];
+        queryJson.lat.max = value[1];
+    };
+
+    const submitQuery = () => {
+        console.log(queryJson);
+
+    };
     useEffect(() => {
         // 从LocalStorage读取数据
         const storedData = localStorage.getItem('varDetails');
@@ -20,25 +47,18 @@ const VarDetailCard = () => {
         return <div>Loading...</div>;
     }
 
-    const onFinish = (values) => {
-        console.log('Received values of form: ', values);
-        if (varDetail) {
-            values.varName = varDetail.name;
-        }
-        if (values.time) {
-            values.time = values.time.format('YYYY-MM-DD');
-        }
-    };
+
     return (
-        <div>
-        <Form onFinish={onFinish}>
-            <h1>Variable Details</h1>
+        <div className='bg-base-200'>
+            <h1 className='text-gray-300 text-3xl'>
+                Variable Details
+            </h1>
             <div className="collapse bg-base-200">
                 <input type="checkbox" /> 
-                <div className="collapse-title text-xl font-medium">
+                <div className="collapse-title text-xl font-medium text-gray-300">
                     Attributes
                 </div>
-                <div className="collapse-content"> 
+                <div className="collapse-content text-gray-400"> 
                     <p><strong>Variable Name: </strong> {varDetail.name}</p>
                     <p><strong>Long Name: </strong> {varDetail.long_name}</p>
                     <p><strong>Variable DataType: </strong> {varDetail.dtype}</p>
@@ -49,10 +69,10 @@ const VarDetailCard = () => {
             
             <div className="collapse bg-base-200">
                 <input type="checkbox" /> 
-                <div className="collapse-title text-xl font-medium">
+                <div className="collapse-title text-xl font-medium text-gray-300">
                     Coordinates
                 </div>
-                <div className="collapse-content"> 
+                <div className="collapse-content text-gray-400"> 
                 {varDetail.coords && varDetail.coords.length > 0 ? (
                     <ul>
                         {varDetail.coords.map((coord, index) => (
@@ -66,9 +86,17 @@ const VarDetailCard = () => {
                                         <p><strong>Type:</strong> {coord.dtype}</p>
                                         <p><strong>Min:</strong> {coord.min}</p>
                                         <p><strong>Max:</strong> {coord.max}</p>
-                                        <Form.Item name={coord.name} label={coord.name.charAt(0).toUpperCase() + coord.name.slice(1)}>
-                                            <DimensionSelector dimension={coord} />
-                                        </Form.Item>
+                                        
+                                        {coord.name === 'time' || coord.name === 't' || coord.name === 'Time' || coord.name === 'T' || coord.name === 'TIME'? (
+                                            <TimeInput dimension={coord} onChange={handleTimeChange} />
+                                        ) : null}
+                                        {(coord.name === 'latitude' || coord.name === 'lat' || coord.name === 'Latitude' || coord.name === 'LAT' || coord.name === 'LATITUDE') ? (
+                                            <LonLatInput dimension={coord} onChange={handleLatChange} />
+                                        ) : null}
+                                        {(coord.name === 'longitude' || coord.name == 'lon' || coord.name === 'Longitude' || coord.name === 'LONGITUDE' || coord.name == 'LON' ) ? (
+                                            <LonLatInput dimension={coord} onChange={handleLonChange} />
+                                        ) : null}
+                                        
                                         
                                     </div>
                                 </div>
@@ -78,12 +106,9 @@ const VarDetailCard = () => {
                 ) : (
                     <p>No coordinates available.</p>
                 )}
+                <button className="btn btn-primary" onClick={() => submitQuery()}>Submit</button>
                 </div>
             </div>
-            <Button type="primary" htmlType="submit">
-                Submit
-            </Button>
-        </Form>
         </div>
     );
 };
