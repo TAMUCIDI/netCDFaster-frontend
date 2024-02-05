@@ -31,7 +31,22 @@ const VarDetailCard = () => {
 
     const submitQuery = () => {
         console.log(queryJson);
+        const queryString = new URLSearchParams(queryJson).toString();
+        const url = 'http://127.0.0.1:5000/file/varplot?${queryString}';
 
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
     };
     useEffect(() => {
         // 从LocalStorage读取数据
