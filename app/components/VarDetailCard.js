@@ -10,43 +10,42 @@ const VarDetailCard = () => {
     const queryJson = {};
     queryJson.varName = varDetail? varDetail.name: null;
     queryJson.time = new Date().toISOString();
-    queryJson.lon = {};
-    queryJson.lon.min = null;
-    queryJson.lon.max = null;
-    queryJson.lat = {};
-    queryJson.lat.min = null;
-    queryJson.lat.max = null;
+    queryJson.lonMin = null;
+    queryJson.lonMax = null;
+    queryJson.latMin = null;
+    queryJson.latMax = null;
 
     const handleTimeChange = (value) => {
         queryJson.time = value.toISOString();
     };
     const handleLonChange = (value) => {
-        queryJson.lon.min = value[0];
-        queryJson.lon.max = value[1];
+        queryJson.lonMin = value[0].toString();
+        queryJson.lonMax = value[1].toString();
     };
     const handleLatChange = (value) => {
-        queryJson.lat.min = value[0];
-        queryJson.lat.max = value[1];
+        queryJson.latMin = value[0].toString();
+        queryJson.latMax = value[1].toString();
     };
 
-    const submitQuery = () => {
+    const submitQuery = async () => {
         console.log(queryJson);
         const queryString = new URLSearchParams(queryJson).toString();
-        const url = 'http://127.0.0.1:5000/file/varplot?${queryString}';
+        const url = `http://127.0.0.1:5000/file/varplot?${queryString}`;
 
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+        try {
+            const response = await fetch(
+                url,
+                {
+                    method: 'GET',
+                    credentials: 'include',
                 }
-                return response.blob();
-            })
-            .then(data => {
-                console.log(data);
-            })
-            .catch(error => {
-                console.error('There has been a problem with your fetch operation:', error);
-            });
+            );
+            const data = await response.blob();
+            const imgURL = URL.createObjectURL(data);
+            console.log(imgURL);
+        } catch (error) {
+            console.error("Error during plotting variables: ", error);
+        }
     };
     useEffect(() => {
         // 从LocalStorage读取数据
