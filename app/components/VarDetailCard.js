@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import TimeInput from '@/app/components/TimeInput';
 import LonLatInput from '@/app/components/LonLatInput';
 
-const VarDetailCard = () => {
+const VarDetailCard = ({ onSubmit }) => {
     const [varDetail, setvarDetail] = useState(null);
 
     const queryJson = {};
     queryJson.varName = varDetail? varDetail.name: null;
-    queryJson.time = new Date().toISOString();
+    queryJson.time = null;
     queryJson.lonMin = null;
     queryJson.lonMax = null;
     queryJson.latMin = null;
@@ -27,26 +27,10 @@ const VarDetailCard = () => {
         queryJson.latMax = value[1].toString();
     };
 
-    const submitQuery = async () => {
-        console.log(queryJson);
-        const queryString = new URLSearchParams(queryJson).toString();
-        const url = `http://127.0.0.1:5000/file/varplot?${queryString}`;
-
-        try {
-            const response = await fetch(
-                url,
-                {
-                    method: 'GET',
-                    credentials: 'include',
-                }
-            );
-            const data = await response.blob();
-            const imgURL = URL.createObjectURL(data);
-            console.log(imgURL);
-        } catch (error) {
-            console.error("Error during plotting variables: ", error);
-        }
+    const handleSubmit = () => {
+        onSubmit(queryJson);
     };
+    
     useEffect(() => {
         // 从LocalStorage读取数据
         const storedData = localStorage.getItem('varDetails');
@@ -63,7 +47,7 @@ const VarDetailCard = () => {
 
 
     return (
-        <div className='bg-base-200'>
+        <div className='flex flex-col flex-wrap items-center justify-center my-4 bg-base-200'>
             <h1 className='text-gray-300 text-3xl'>
                 Variable Details
             </h1>
@@ -88,15 +72,15 @@ const VarDetailCard = () => {
                 </div>
                 <div className="collapse-content text-gray-400"> 
                 {varDetail.coords && varDetail.coords.length > 0 ? (
-                    <ul>
+                    <div className='flex flex-col flex-wrap my-2'>
                         {varDetail.coords.map((coord, index) => (
-                            <li key={index}>
-                                <div className="collapse bg-base-200">
-                                    <input type="checkbox" /> 
-                                    <div className="collapse-title text-xl font-medium">
-                                        {coord.name}
-                                    </div>
-                                    <div className="collapse-content"> 
+                            <div className="collapse bg-base-200">
+                                <input type="checkbox" /> 
+                                <div className="collapse-title text-xl font-medium">
+                                    {coord.name}
+                                </div>
+                                <div className="collapse-content"> 
+                                    <div className='flex flex-col flex-wrap my-2'>
                                         <p><strong>Type:</strong> {coord.dtype}</p>
                                         <p><strong>Min:</strong> {coord.min}</p>
                                         <p><strong>Max:</strong> {coord.max}</p>
@@ -110,17 +94,16 @@ const VarDetailCard = () => {
                                         {(coord.name === 'longitude' || coord.name == 'lon' || coord.name === 'Longitude' || coord.name === 'LONGITUDE' || coord.name == 'LON' ) ? (
                                             <LonLatInput dimension={coord} onChange={handleLonChange} />
                                         ) : null}
-                                        
-                                        
                                     </div>
                                 </div>
-                            </li>
+                            </div>
                         ))}
-                    </ul>
+                        <button className="btn btn-primary" onClick={handleSubmit}>Submit</button>
+                    </div>
                 ) : (
                     <p>No coordinates available.</p>
                 )}
-                <button className="btn btn-primary" onClick={() => submitQuery()}>Submit</button>
+                
                 </div>
             </div>
         </div>
