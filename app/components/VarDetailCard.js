@@ -8,7 +8,7 @@ const VarDetailCard = ({ onSubmit }) => {
     const [varDetail, setvarDetail] = useState(null);
 
     const queryJson = {};
-    queryJson.varName = varDetail? varDetail.name: null;
+    queryJson.varName = varDetail? varDetail.var_short_name: null;
     queryJson.time = null;
     queryJson.lonMin = null;
     queryJson.lonMax = null;
@@ -57,8 +57,8 @@ const VarDetailCard = ({ onSubmit }) => {
                     Attributes
                 </div>
                 <div className="collapse-content text-gray-400"> 
-                    <p><strong>Variable Name: </strong> {varDetail.name}</p>
-                    <p><strong>Long Name: </strong> {varDetail.long_name}</p>
+                    <p><strong>Variable Name: </strong> {varDetail.var_short_name}</p>
+                    <p><strong>Long Name: </strong> {varDetail.var_long_name}</p>
                     <p><strong>Variable DataType: </strong> {varDetail.dtype}</p>
                     <p><strong>Shape:</strong> {varDetail.shape}</p>
                     <p><strong>Units:</strong> {varDetail.units}</p>

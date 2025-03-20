@@ -18,6 +18,7 @@ const TimeInput = ({ dimension, onChange }) => {
         <div>
             <DatePicker
                 disabledDate={(current) => disabledDate(current, min, max)}
+                showTime
                 onChange={handleChange}
             />
         </div>
