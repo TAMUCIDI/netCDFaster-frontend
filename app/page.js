@@ -1,7 +1,8 @@
 "use client";
 import React, { useState } from 'react';
 import Image from 'next/image'
-import FileUpload from '@/app/components/FileUpload';
+//import FileUpload from '@/app/components/FileUpload';
+import DualInput from '@/app/components/DualInput';
 import MetaInfoDisplay from '@/app/components/MetaInfoDisplay';
 import Typist from '@/app/components/Typist';
 
@@ -38,10 +39,13 @@ export default function Home() {
                     At NetCDFaster, we redefine the boundaries of data processing. Our tool revolutionizes the speed of reading and visualizing netCDF data through an efficient parallel IO interface. Experience lightweight operations with unprecedented speed and intuitive data analysis. Ideal for large datasets or complex scientific computations, NetCDFaster is your go-to solution. Join us on a journey of high-speed data exploration.
                 </p>
             </div>
-            <div className="flex flex-col items-center justify-center my-8 max-w-2xl mx-auto">
+            <div className="flex justify-center">
+                <DualInput />
+            </div>
+            {/* <div className="flex flex-col items-center justify-center my-8 max-w-2xl mx-auto">
                 <FileUpload onFileUpload={handleFileUpload} />
                 {metaInfoJson && <MetaInfoDisplay jsonData={metaInfoJson} />}
-            </div>
+            </div> */}
         </div> 
     );
 }
