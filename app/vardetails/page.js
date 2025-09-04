@@ -8,7 +8,8 @@ export default function vardetails() {
     const [imageSrc, setImageSrc] = useState(null);
     const submitQuery = async (queryJson) => {
         const queryString = new URLSearchParams(queryJson).toString();
-        const url = `http://127.0.0.1:5000/file/varplot?${queryString}`;
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL || 'http://127.0.0.1:5000';
+        const url = `${backendUrl}/file/varplot?${queryString}`;
 
         try {
             const response = await fetch(
