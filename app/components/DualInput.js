@@ -358,13 +358,17 @@ const DualInput = () => {
       // Start progress simulation
       const progressPromise = simulateProgress(progressSteps);
       
-      // Call backend API to process URL
-      const response = await fetch('/api/process-url', {
+      // Get backend URL from environment
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:5000';
+      
+      // Call Flask backend API directly for URL processing
+      const response = await fetch(`${backendUrl}/file/remoteQuery`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ url })
+        body: JSON.stringify({ url }),
+        credentials: 'include'
       });
       
       // Wait for both API call and progress simulation
