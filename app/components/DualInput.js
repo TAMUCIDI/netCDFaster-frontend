@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 
 const DualInput = () => {
+  const router = useRouter();
   const [activeMode, setActiveMode] = useState('url');
   const [url, setUrl] = useState('');
   const [file, setFile] = useState(null);
@@ -139,6 +141,188 @@ const DualInput = () => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
   };
 
+  // Navigate to variable details with selected variable
+  const navigateToVariableDetails = (variableName, variableData) => {
+    // Store variable metadata in localStorage for the details page
+    const metadata = {
+      variable: variableName,
+      data: variableData,
+      dimensions: result?.data?.dimensions || {},
+      upload_info: result?.data?.upload_info || {}
+    };
+    localStorage.setItem('selectedVariable', JSON.stringify(metadata));
+    router.push('/vardetails');
+  };
+
+  // Render NetCDF results in a user-friendly format
+  const renderNetCDFResults = (data) => {
+    if (!data?.data) return null;
+
+    const { upload_info, dimensions, variables, attributes } = data.data;
+    
+    return (
+      <div className="space-y-6">
+        {/* File Information Card */}
+        <div className="bg-base-100 rounded-lg p-6 border border-gray-600">
+          <div className="flex items-center mb-4">
+            <div className="bg-success/20 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-200">File Information</h3>
+              <p className="text-sm text-gray-400">NetCDF file successfully processed</p>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-base-200 rounded-lg p-4">
+              <div className="text-xs text-gray-400 uppercase tracking-wide mb-1">Filename</div>
+              <div className="text-sm font-medium text-gray-200 truncate">{upload_info?.original_filename || 'N/A'}</div>
+            </div>
+            <div className="bg-base-200 rounded-lg p-4">
+              <div className="text-xs text-gray-400 uppercase tracking-wide mb-1">File Size</div>
+              <div className="text-sm font-medium text-gray-200">{upload_info?.file_size_mb ? `${upload_info.file_size_mb} MB` : 'N/A'}</div>
+            </div>
+            <div className="bg-base-200 rounded-lg p-4">
+              <div className="text-xs text-gray-400 uppercase tracking-wide mb-1">Upload Time</div>
+              <div className="text-sm font-medium text-gray-200">{upload_info?.upload_time ? new Date(upload_info.upload_time).toLocaleString() : 'N/A'}</div>
+            </div>
+          </div>
+
+          {/* Global Attributes */}
+          {attributes && Object.keys(attributes).length > 0 && (
+            <div className="mt-4">
+              <h4 className="text-sm font-medium text-gray-300 mb-2">Global Attributes</h4>
+              <div className="bg-base-200 rounded-lg p-3">
+                <div className="space-y-1">
+                  {Object.entries(attributes).map(([key, value]) => (
+                    <div key={key} className="flex justify-between text-xs">
+                      <span className="text-gray-400">{key}:</span>
+                      <span className="text-gray-300 max-w-xs truncate">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Dimensions Card */}
+        {dimensions && Object.keys(dimensions).length > 0 && (
+          <div className="bg-base-100 rounded-lg p-6 border border-gray-600">
+            <div className="flex items-center mb-4">
+              <div className="bg-primary/20 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 1.79 4 4 4h8c2.21 0 4-1.79 4-4V7c0-2.21-1.79-4-4-4H8c-2.21 0-4 1.79-4 4z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-200">Data Dimensions</h3>
+                <p className="text-sm text-gray-400">Structure and size of the data</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {Object.entries(dimensions).map(([dim, size]) => (
+                <div key={dim} className="bg-primary/10 rounded-lg p-3 text-center border border-primary/20">
+                  <div className="text-xs text-primary uppercase tracking-wide mb-1">{dim}</div>
+                  <div className="text-lg font-bold text-primary">{size}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Variables List */}
+        {variables && Object.keys(variables).length > 0 && (
+          <div className="bg-base-100 rounded-lg p-6 border border-gray-600">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <div className="bg-secondary/20 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-200">Variables</h3>
+                  <p className="text-sm text-gray-400">{Object.keys(variables).length} variables available for visualization</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid gap-3">
+              {Object.entries(variables).map(([varName, varData]) => {
+                const isCoordinate = ['time', 'latitude', 'longitude'].includes(varName.toLowerCase()) || 
+                                   varData.dims.length === 1 && varData.dims[0] === varName;
+                
+                return (
+                  <div key={varName} className={`rounded-lg p-4 border transition-all ${
+                    isCoordinate 
+                      ? 'bg-base-200 border-gray-600' 
+                      : 'bg-secondary/5 border-secondary/20 hover:bg-secondary/10 hover:border-secondary/30 cursor-pointer'
+                  }`}
+                  onClick={!isCoordinate ? () => navigateToVariableDetails(varName, varData) : undefined}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center mb-2">
+                          <h4 className="font-medium text-gray-200">{varName}</h4>
+                          {isCoordinate && (
+                            <span className="ml-2 px-2 py-1 bg-gray-600 text-gray-300 rounded-full text-xs">Coordinate</span>
+                          )}
+                          {!isCoordinate && (
+                            <span className="ml-2 px-2 py-1 bg-secondary/20 text-secondary rounded-full text-xs">Data Variable</span>
+                          )}
+                        </div>
+                        
+                        <div className="text-sm text-gray-400 mb-2">
+                          {varData.attributes?.long_name || 'No description available'}
+                        </div>
+                        
+                        <div className="flex flex-wrap gap-2 text-xs">
+                          <span className="bg-base-300 px-2 py-1 rounded text-gray-400">
+                            Shape: [{varData.shape?.join(', ') || 'N/A'}]
+                          </span>
+                          <span className="bg-base-300 px-2 py-1 rounded text-gray-400">
+                            Type: {varData.dtype || 'N/A'}
+                          </span>
+                          {varData.attributes?.units && (
+                            <span className="bg-base-300 px-2 py-1 rounded text-gray-400">
+                              Units: {varData.attributes.units}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {!isCoordinate && (
+                        <div className="ml-4">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            <div className="mt-4 p-3 bg-info/10 border border-info/20 rounded-lg">
+              <p className="text-sm text-info flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Click on any data variable to visualize and analyze it
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   // Simulate progress updates
   const simulateProgress = async (steps) => {
     for (const step of steps) {
@@ -230,10 +414,14 @@ const DualInput = () => {
       const formData = new FormData();
       formData.append('file', file);
       
-      // Call backend API to upload file
-      const response = await fetch('/api/upload', {
+      // Get backend URL from environment
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:5000';
+      
+      // Call Flask backend API directly
+      const response = await fetch(`${backendUrl}/file/upload`, {
         method: 'POST',
-        body: formData
+        body: formData,
+        credentials: 'include'
       });
       
       // Wait for both API call and progress simulation
@@ -549,18 +737,17 @@ const DualInput = () => {
         
         {/* Results Display */}
         {result && (
-          <div className="mt-6 p-4 bg-success/10 border border-success/30 rounded-lg">
-            <h3 className="font-medium text-success mb-2 flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              Processing Results
-            </h3>
-            <div className="mt-2 p-3 bg-base-100 rounded-md">
-              <pre className="text-sm text-gray-300 whitespace-pre-wrap overflow-x-auto">
-                {JSON.stringify(result, null, 2)}
-              </pre>
+          <div className="mt-6">
+            <div className="mb-4 p-4 bg-success/10 border border-success/30 rounded-lg">
+              <h3 className="font-medium text-success mb-2 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                File Processing Complete
+              </h3>
+              <p className="text-sm text-success">NetCDF file has been successfully analyzed and is ready for exploration.</p>
             </div>
+            {renderNetCDFResults(result)}
           </div>
         )}
       </div>
