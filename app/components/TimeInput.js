@@ -20,6 +20,7 @@ const TimeInput = ({ dimension, onChange }) => {
                 disabledDate={(current) => disabledDate(current, min, max)}
                 showTime
                 onChange={handleChange}
+                defaultValue={moment(min)}
             />
         </div>
     );

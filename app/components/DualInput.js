@@ -142,16 +142,9 @@ const DualInput = () => {
   };
 
   // Navigate to variable details with selected variable
-  const navigateToVariableDetails = (variableName, variableData) => {
-    // Store variable metadata in localStorage for the details page
-    const metadata = {
-      variable: variableName,
-      data: variableData,
-      dimensions: result?.data?.dimensions || {},
-      upload_info: result?.data?.upload_info || {}
-    };
-    localStorage.setItem('selectedVariable', JSON.stringify(metadata));
-    router.push('/vardetails');
+  const navigateToVariableDetails = (variableName) => {
+    // Navigate to dynamic route with variable name as parameter
+    router.push(`/vardetails/${encodeURIComponent(variableName)}`);
   };
 
   // Render NetCDF results in a user-friendly format
@@ -263,7 +256,7 @@ const DualInput = () => {
                       ? 'bg-base-200 border-gray-600' 
                       : 'bg-secondary/5 border-secondary/20 hover:bg-secondary/10 hover:border-secondary/30 cursor-pointer'
                   }`}
-                  onClick={!isCoordinate ? () => navigateToVariableDetails(varName, varData) : undefined}
+                  onClick={!isCoordinate ? () => navigateToVariableDetails(varName) : undefined}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
