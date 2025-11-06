@@ -1,6 +1,6 @@
 import { handleApiError, AppError, ERROR_CODES } from './errorHandler';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL || 'http://127.0.0.1:5000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:5000';
 const API_TIMEOUT = parseInt(process.env.API_TIMEOUT || '30000');
 const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE || '52428800'); // 50MB
 

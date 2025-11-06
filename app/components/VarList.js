@@ -6,7 +6,8 @@ const VarList = ( {varList} ) => {
 
     const handleVarCardClick = async (key) => {
         try {
-            const response = await fetch('http://127.0.0.1:5000/file/detail/'+key,
+            const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:5000';
+            const response = await fetch(`${backendUrl}/file/detail/${encodeURIComponent(key)}`,
             {
                 method: 'GET',
                 credentials: 'include',
@@ -15,7 +16,9 @@ const VarList = ( {varList} ) => {
             // 将数据存储到LocalStorage中
             localStorage.setItem('varDetails', JSON.stringify(data));
             // 跳转到目标页面
-            router.push(`/vardetails`)
+            const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/netcdfaster-frontend';
+            const path = basePath ? `${basePath}/vardetails` : '/vardetails';
+            router.push(path)
         } catch (error) {
             console.error("Error during file upload: ", error);
         }

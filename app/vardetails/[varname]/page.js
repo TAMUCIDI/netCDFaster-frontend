@@ -26,7 +26,7 @@ export default function VariableDetails() {
                 setLoading(true);
                 setError(null);
                 
-                const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL || 'http://127.0.0.1:5000';
+                const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:5000';
                 const response = await fetch(`${backendUrl}/file/detail/${encodeURIComponent(varName)}`, {
                     method: 'GET',
                     credentials: 'include',
@@ -55,7 +55,7 @@ export default function VariableDetails() {
 
     const submitQuery = async (queryJson) => {
         const queryString = new URLSearchParams(queryJson).toString();
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL || 'http://127.0.0.1:5000';
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:5000';
         const url = `${backendUrl}/file/varplot?${queryString}`;
 
         try {

@@ -144,7 +144,9 @@ const DualInput = () => {
   // Navigate to variable details with selected variable
   const navigateToVariableDetails = (variableName) => {
     // Navigate to dynamic route with variable name as parameter
-    router.push(`/vardetails/${encodeURIComponent(variableName)}`);
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/netcdfaster-frontend';
+    const path = basePath ? `${basePath}/vardetails/${encodeURIComponent(variableName)}` : `/vardetails/${encodeURIComponent(variableName)}`;
+    router.push(path);
   };
 
   // Render NetCDF results in a user-friendly format
@@ -353,7 +355,7 @@ const DualInput = () => {
       
       // Get backend URL from environment
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:5000';
-      
+
       // Call Flask backend API directly for URL processing
       const response = await fetch(`${backendUrl}/file/remoteQuery`, {
         method: 'POST',
@@ -413,7 +415,7 @@ const DualInput = () => {
       
       // Get backend URL from environment
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:5000';
-      
+
       // Call Flask backend API directly
       const response = await fetch(`${backendUrl}/file/upload`, {
         method: 'POST',
