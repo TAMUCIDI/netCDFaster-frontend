@@ -144,7 +144,7 @@ const DualInput = () => {
   // Navigate to variable details with selected variable
   const navigateToVariableDetails = (variableName) => {
     // Navigate to dynamic route with variable name as parameter
-    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/netcdfaster-frontend';
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/netcdfaster';
     const path = basePath ? `${basePath}/vardetails/${encodeURIComponent(variableName)}` : `/vardetails/${encodeURIComponent(variableName)}`;
     router.push(path);
   };

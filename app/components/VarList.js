@@ -16,7 +16,7 @@ const VarList = ( {varList} ) => {
             // 将数据存储到LocalStorage中
             localStorage.setItem('varDetails', JSON.stringify(data));
             // 跳转到目标页面
-            const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/netcdfaster-frontend';
+            const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/netcdfaster';
             const path = basePath ? `${basePath}/vardetails` : '/vardetails';
             router.push(path)
         } catch (error) {

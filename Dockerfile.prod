@@ -8,7 +8,7 @@ WORKDIR /app
 # Declare build arguments - only NEXT_PUBLIC_* need to be set at build time
 # because they get compiled into the frontend code
 # These should be overridden at build time with --build-arg
-ARG NEXT_PUBLIC_BASE_PATH=/netcdfaster-frontend
+ARG NEXT_PUBLIC_BASE_PATH=/netcdfaster
 ARG NEXT_PUBLIC_BACKEND_URL=http://127.0.0.1:5000
 
 # Set environment variables for build
