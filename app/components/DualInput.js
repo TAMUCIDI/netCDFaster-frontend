@@ -352,7 +352,7 @@ const DualInput = () => {
       
       // Start progress simulation
       const progressPromise = simulateProgress(progressSteps);
-      
+
       // Get backend URL from environment
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:5000';
 
@@ -375,11 +375,16 @@ const DualInput = () => {
       }
       
       const data = await response.json();
-      setResult(data);
-      setProcessingStep('Complete!');
+
+      // Store the result in localStorage
+      localStorage.setItem('currentFileMetadata', JSON.stringify(data));
+
+      // Navigate to file_meta page
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/netcdfaster';
+      const path = basePath ? `${basePath}/file_meta` : `/file_meta`;
+      router.push(path);
     } catch (err) {
       setError(err.message || 'Error processing URL');
-    } finally {
       setIsProcessing(false);
       setProcessingStep('');
       setProgress(0);
@@ -409,10 +414,10 @@ const DualInput = () => {
       
       // Start progress simulation
       const progressPromise = simulateProgress(progressSteps);
-      
+
       const formData = new FormData();
       formData.append('file', file);
-      
+
       // Get backend URL from environment
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:5000';
 
@@ -432,11 +437,16 @@ const DualInput = () => {
       }
       
       const data = await response.json();
-      setResult(data);
-      setProcessingStep('Complete!');
+
+      // Store the result in localStorage
+      localStorage.setItem('currentFileMetadata', JSON.stringify(data));
+
+      // Navigate to file_meta page
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/netcdfaster';
+      const path = basePath ? `${basePath}/file_meta` : `/file_meta`;
+      router.push(path);
     } catch (err) {
       setError(err.message || 'Error uploading file');
-    } finally {
       setIsProcessing(false);
       setProcessingStep('');
       setProgress(0);

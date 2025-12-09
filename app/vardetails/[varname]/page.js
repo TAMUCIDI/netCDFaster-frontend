@@ -11,7 +11,8 @@ export default function VariableDetails() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [plotImage, setPlotImage] = useState(null);
-    
+    const [isGeneratingPlot, setIsGeneratingPlot] = useState(false);
+
     const varName = params.varname ? decodeURIComponent(params.varname) : null;
 
     useEffect(() => {
@@ -25,7 +26,7 @@ export default function VariableDetails() {
             try {
                 setLoading(true);
                 setError(null);
-                
+
                 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:5000';
                 const response = await fetch(`${backendUrl}/file/detail/${encodeURIComponent(varName)}`, {
                     method: 'GET',
@@ -54,6 +55,9 @@ export default function VariableDetails() {
     }, [varName]);
 
     const submitQuery = async (queryJson) => {
+        setIsGeneratingPlot(true);
+        setError(null);
+
         const queryString = new URLSearchParams(queryJson).toString();
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:5000';
         const url = `${backendUrl}/file/varplot?${queryString}`;
@@ -63,16 +67,19 @@ export default function VariableDetails() {
                 method: 'GET',
                 credentials: 'include',
             });
-            
+
             if (!response.ok) {
                 throw new Error('Failed to generate plot');
             }
-            
+
             const data = await response.blob();
             const imgURL = URL.createObjectURL(data);
             setPlotImage(imgURL);
         } catch (error) {
             console.error("Error during plotting variables:", error);
+            setError('Failed to generate plot. Please try again.');
+        } finally {
+            setIsGeneratingPlot(false);
         }
     };
 
@@ -122,6 +129,17 @@ export default function VariableDetails() {
 
     return (
         <div className='min-h-screen bg-gray-50 dark:bg-gray-900'>
+            {/* Back Button - Upper Left */}
+            <button
+                onClick={() => window.history.back()}
+                className="fixed top-4 left-4 btn btn-ghost btn-sm z-10 flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+            >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back
+            </button>
+
             {/* Header with Logo */}
             <div className='flex justify-center pt-8 pb-4'>
                 <Image 
@@ -136,9 +154,10 @@ export default function VariableDetails() {
             <div className='flex flex-col lg:flex-row gap-8 px-6 pb-8 justify-center'>
                 {/* Left Side - Variable Details Card */}
                 <div className='flex-shrink-0 lg:w-1/2 xl:w-2/5'>
-                    <VarDetailCard 
+                    <VarDetailCard
                         varDetail={varDetail}
                         onSubmit={submitQuery}
+                        isGeneratingPlot={isGeneratingPlot}
                     />
                 </div>
                 
