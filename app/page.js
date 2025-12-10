@@ -38,7 +38,7 @@ export default function Home() {
         />
         <Typist />
         <p className="text-left my-4 max-w-3xl mx-auto">
-          At NetCDFaster, we redefine the boundaries of data processing. Our tool revolutionizes the speed of reading and visualizing netCDF data through an efficient parallel IO interface. Experience lightweight operations with unprecedented speed and intuitive data analysis. Ideal for large datasets or complex scientific computations, NetCDFaster is your go-to solution. Join us on a journey of high-speed data exploration.
+          The cutting-edge solution for rapid netCDF data processing and visualization. Unlock extraordinary speed with an advanced parallel IO interface, enabling fast, lightweight operations and seamless NetCDF data analysis and visualization. Discover the future of high-performance data workflows with NetCDFaster. 
         </p>
       </div>
       <div className="w-full">

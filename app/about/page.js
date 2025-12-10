@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 
 export default function AboutPage() {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/netcdfaster';
 return (
   <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
     {/* Main Content */}
@@ -74,7 +75,7 @@ return (
         <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
           <div className="flex items-center justify-center">
             <Image
-              src="/NSF_logo.svg"
+              src={`${basePath}/NSF_logo.svg`}
               width={150}
               height={150}
               alt="National Science Foundation Logo"
@@ -83,7 +84,7 @@ return (
           </div>
           <div className="flex items-center justify-center">
             <Image
-              src="/RBG-TAM-MaroonBox.svg"
+              src={`${basePath}/RBG-TAM-MaroonBox.svg`}
               width={150}
               height={150}
               alt="Texas A&M University Logo"
