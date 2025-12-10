@@ -38,7 +38,7 @@ export default function Header() {
         >
           NetCDFaster
         </button>
-        <span className="badge badge-warning badge-sm">v0.5-preview</span>
+        <span className="badge badge-warning badge-sm">V0.5</span>
       </div>
 
       <div className="navbar-center hidden lg:flex">

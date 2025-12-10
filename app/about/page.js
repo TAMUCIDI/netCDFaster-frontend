@@ -28,27 +28,15 @@ return (
         <div className="divider"></div>
         {/* Paper Citation Section */}
         <h2>Citation</h2>
-        <p>
-          If you use NetCDFaster in your research, please cite our paper:
-        </p>
         <div className="not-prose">
           <div className="mockup-code bg-base-200 text-base-content">
-            <pre data-prefix="@"><code>article{'{'}netcdfaster2024,</code></pre>
-            <pre data-prefix="    "><code>title={'{'}NetCDFaster: Optimizing NetCDF data querying and geo-visualization using high-performance machine learning{'}'}, </code></pre>
-            <pre data-prefix="    "><code>author={'{'}Zhenlei Song and Zhe Zhang and Alan Sussman and Yuhang Xie and Jorge Brenner and Jikun Liu{'}'},</code></pre>
-            <pre data-prefix="    "><code>journal={'{'}SoftwareX{'}'},</code></pre>
-            <pre data-prefix="    "><code>year={'{'}2025{'}'},</code></pre>
-            <pre data-prefix="    "><code>volume={'{'}31{'}'},</code></pre>
-            <pre data-prefix="    "><code>pages={'{'}102269{'}'},</code></pre>
-            <pre data-prefix="    "><code>doi={'{'}https://doi.org/10.1016/j.softx.2025.102269{'}'}</code></pre>
-            <pre data-prefix="}"><code></code></pre>
+            <pre className="whitespace-pre-wrap break-words pl-4"><code>Song, Z., Zhang, Z., Sussman, A., Xie, Y., Brenner, J., & Liu, J. (2025). NetCDFaster: Optimizing NetCDF data querying and geo-visualization using high-performance machine learning. SoftwareX, 31, 102269. https://doi.org/10.1016/j.softx.2025.102269</code></pre>
           </div>
         </div>
       {/* GitHub Link Section */}
       <h2>GitHub Repo</h2>
       <p>
-      NetCDFaster is open-source and available on GitHub. We welcome contributions, bug reports, and feature requests
-      from the community.
+      NetCDFaster is open-source and available on GitHub.
       </p>
       <div className="not-prose flex flex-wrap gap-4 mt-4">
         <a
@@ -76,12 +64,9 @@ return (
       </div>
 
       {/* Acknowledgments */}
-      <h2>Acknowledgments</h2>
+      <h2>Acknowledgment</h2>
       <p>
-      This material is based on work funded by the National Science Foundation under Grant No. #2137684 #2019129 #2321069 #2339174 #2519476 #2526748.
-      </p>
-      <p>
-      The process of data processing, analysis, and model trainign and evaluation were conducted on TAMU HPRC ACES cluster.
+      This is funded by the National Science Foundation (NSF) under Grant No. #2339174 #2526748 # 2519476 # 2321069 # 2112356.
       </p>
 
       {/* Logos Section */}
