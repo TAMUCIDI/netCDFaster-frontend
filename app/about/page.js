@@ -6,29 +6,20 @@ import Image from 'next/image';
 export default function AboutPage() {
 return (
   <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-    {/* Back Button - Upper Left */}
-    <button
-      onClick={() => window.history.back()}
-      className="fixed top-4 left-4 btn btn-ghost btn-sm z-10 flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-    >
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-    </svg>
-      Back
-    </button>
+    {/* Main Content */}
+    <div className="max-w-5xl mx-auto px-6 pt-8 pb-8">
+      {/* Header with Logo */}
+      <div className="flex justify-center pb-4">
+        <Image
+          src="/logo_transparent.png"
+          width={300}
+          height={300}
+          alt="NetCDFaster Logo"
+        />
+      </div>
 
-    {/* Header with Logo */}
-    <div className="flex justify-center pt-8 pb-4">
-      <Image
-        src="/logo_transparent.png"
-        width={300}
-        height={300}
-        alt="NetCDFaster Logo"
-      />
-    </div>
-
-    {/* Main Content with DaisyUI Typography */}
-    <div className="max-w-4xl mx-auto px-6 pb-12">
+      {/* Content with DaisyUI Typography */}
+      <div className="max-w-4xl mx-auto">
       <article className="prose prose-lg dark:prose-invert mx-auto">
 
         {/* Title */}
@@ -126,6 +117,7 @@ return (
       </div>
 
       </article>
+      </div>
     </div>
   </div>
 );

@@ -121,7 +121,7 @@ export default function FileMetaPage() {
         )}
 
         {/* Variables Card */}
-        {variables && variables.length > 0 && (
+        {variables && Object.keys(variables).length > 0 && (
           <div className="bg-base-100 rounded-lg p-6 border border-gray-600">
             <div className="flex items-center mb-4">
               <div className="bg-accent/20 w-12 h-12 rounded-full flex items-center justify-center mr-4">
@@ -131,35 +131,76 @@ export default function FileMetaPage() {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-200">Variables</h3>
-                <p className="text-sm text-gray-400">{variables.length} variable{variables.length !== 1 ? 's' : ''} available</p>
+                <p className="text-sm text-gray-400">{Object.keys(variables).length} variable{Object.keys(variables).length !== 1 ? 's' : ''} available</p>
               </div>
             </div>
 
-            <div className="space-y-2">
-              {variables.map((variable) => (
-                <button
-                  key={variable.var_short_name}
-                  onClick={() => navigateToVariableDetails(variable.var_short_name)}
-                  className="w-full bg-base-200 hover:bg-base-300 rounded-lg p-4 text-left transition-colors duration-200 border border-transparent hover:border-primary group"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-semibold text-gray-200 group-hover:text-primary">{variable.var_short_name}</span>
-                        <span className="text-xs bg-info/20 text-info px-2 py-0.5 rounded">{variable.dtype}</span>
+            <div className="grid gap-3">
+              {Object.entries(variables).map(([varName, varData]) => {
+                const isCoordinate = ['time', 'latitude', 'longitude'].includes(varName.toLowerCase()) ||
+                                   varData.dims?.length === 1 && varData.dims[0] === varName;
+
+                return (
+                  <div
+                    key={varName}
+                    className={`rounded-lg p-4 border transition-all ${
+                      isCoordinate
+                        ? 'bg-base-200 border-gray-600'
+                        : 'bg-secondary/5 border-secondary/20 hover:bg-secondary/10 hover:border-secondary/30 cursor-pointer'
+                    }`}
+                    onClick={!isCoordinate ? () => navigateToVariableDetails(varName) : undefined}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center mb-2">
+                          <h4 className="font-medium text-gray-200">{varName}</h4>
+                          {isCoordinate && (
+                            <span className="ml-2 px-2 py-1 bg-gray-600 text-gray-300 rounded-full text-xs">Coordinate</span>
+                          )}
+                          {!isCoordinate && (
+                            <span className="ml-2 px-2 py-1 bg-secondary/20 text-secondary rounded-full text-xs">Data Variable</span>
+                          )}
+                        </div>
+
+                        <div className="text-sm text-gray-400 mb-2">
+                          {varData.attributes?.long_name || 'No description available'}
+                        </div>
+
+                        <div className="flex flex-wrap gap-2 text-xs">
+                          <span className="bg-base-300 px-2 py-1 rounded text-gray-400">
+                            Shape: [{varData.shape?.join(', ') || 'N/A'}]
+                          </span>
+                          <span className="bg-base-300 px-2 py-1 rounded text-gray-400">
+                            Type: {varData.dtype || 'N/A'}
+                          </span>
+                          {varData.attributes?.units && (
+                            <span className="bg-base-300 px-2 py-1 rounded text-gray-400">
+                              Units: {varData.attributes.units}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                      <p className="text-xs text-gray-400 line-clamp-1">{variable.var_long_name}</p>
-                      <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
-                        <span>Shape: {variable.shape}</span>
-                        {variable.units && <span>Units: {variable.units}</span>}
-                      </div>
+
+                      {!isCoordinate && (
+                        <div className="ml-4">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                      )}
                     </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 group-hover:text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
                   </div>
-                </button>
-              ))}
+                );
+              })}
+            </div>
+
+            <div className="mt-4 p-3 bg-info/10 border border-info/20 rounded-lg">
+              <p className="text-sm text-info flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Click on any data variable to visualize and analyze it
+              </p>
             </div>
           </div>
         )}
@@ -209,29 +250,18 @@ export default function FileMetaPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Back Button - Upper Left */}
-      <button
-        onClick={() => window.history.back()}
-        className="fixed top-4 left-4 btn btn-ghost btn-sm z-10 flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-      >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-        Back
-      </button>
-
-      {/* Header with Logo */}
-      <div className="flex justify-center pt-8 pb-4">
-        <Image
-          src="/logo_transparent.png"
-          width={300}
-          height={300}
-          alt="Logo"
-        />
-      </div>
-
       {/* Main Content */}
-      <div className="max-w-5xl mx-auto px-6 pb-8">
+      <div className="max-w-5xl mx-auto px-6 pt-8 pb-8">
+        {/* Header with Logo */}
+        <div className="flex justify-center pb-4">
+          <Image
+            src="/logo_transparent.png"
+            width={300}
+            height={300}
+            alt="Logo"
+          />
+        </div>
+
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
           NetCDF File Metadata
         </h1>

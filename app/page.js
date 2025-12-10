@@ -30,11 +30,11 @@ export default function Home() {
   return (
     <div>
       <div className="flex flex-col items-center justify-center my-8">
-        <Image 
-          src="/logo_transparent.png" 
-          width={400}
-          height={400}
-          alt="Logo" 
+        <Image
+          src="/logo_transparent.png"
+          width={300}
+          height={300}
+          alt="Logo"
         />
         <Typist />
         <p className="text-left my-4 max-w-3xl mx-auto">
