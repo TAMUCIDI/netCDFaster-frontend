@@ -29,7 +29,7 @@ export default function Home() {
   };
   return (
     <div>
-      <div className="flex flex-col items-center justify-center my-8">
+      <div className="flex flex-col items-center justify-center my-8 max-w-3xl mx-auto ">
         <Image
           src="/logo_transparent.png"
           width={300}

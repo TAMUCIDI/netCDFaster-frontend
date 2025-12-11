@@ -67,7 +67,7 @@ return (
       {/* Acknowledgments */}
       <h2>Acknowledgment</h2>
       <p>
-      This is funded by the National Science Foundation (NSF) under Grant No. #2339174 #2526748 # 2519476 # 2321069 # 2112356.
+      NetCDFaster is funded by the National Science Foundation (NSF) under Grant No. #2339174 #2526748 # 2519476 # 2321069 # 2112356.
       </p>
 
       {/* Logos Section */}
@@ -98,7 +98,7 @@ return (
 
       {/* Footer */}
       <div className="text-center text-sm opacity-70">
-        <p>© 2024 TAMU CIDI Lab.</p>
+        <p>© 2025 <a href="https://www.cidigis.com/" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Cyberinfrastructure and Spatial Decision Intelligence (CIDI) Research Group</a>.</p>
         <p>Licensed under MIT License</p>
       </div>
 

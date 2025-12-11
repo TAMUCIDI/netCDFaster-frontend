@@ -5,13 +5,13 @@ const Typist = () => {
     return (
         <TypeAnimation
           sequence={[
-            'NetCDFaster: Speeding Data, Simplifying Vision.',
+            'NetCDFaster: Accelerating Data Visualization with Advanced Cyberinfrastructure and High-Performance AI.',
             2000, // Waits 2s
           ]}
           wrapper="span"
           cursor={true}
           repeat={Infinity}
-          style={{ fontSize: '2em', display: 'inline-block' }}
+          style={{ whiteSpace: 'pre-line',fontSize: '2em', display: 'block' }}
         />
     );
 };
